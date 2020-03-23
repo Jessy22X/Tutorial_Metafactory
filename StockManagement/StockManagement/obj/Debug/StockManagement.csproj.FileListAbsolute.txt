@@ -10,3 +10,4 @@ C:\Users\jessx\source\repos\StockManagement\StockManagement\obj\Debug\StockManag
 C:\Users\jessx\source\repos\StockManagement\StockManagement\obj\Debug\StockManagement.csproj.CoreCompileInputs.cache
 C:\Users\jessx\source\repos\StockManagement\StockManagement\obj\Debug\StockManagement.exe
 C:\Users\jessx\source\repos\StockManagement\StockManagement\obj\Debug\StockManagement.pdb
+C:\Users\jessx\source\repos\StockManagement\StockManagement\obj\Debug\StockManagement.StockManagement.resources
