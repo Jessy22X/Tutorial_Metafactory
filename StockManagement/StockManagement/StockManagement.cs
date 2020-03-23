@@ -94,7 +94,34 @@ namespace StockManagement
                 {
                     dgc.Visible = false;
                 }
-                // pareil mais il faut remplacer dgc.DataPropertyName par SearchDefines.column.Name
+                if(dgc.DataPropertyName == SearchDefines.column_tank_name)
+                {
+                    dgc.HeaderText = "Tank name";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_stock_number)
+                {
+                    dgc.HeaderText = "Stock number";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_location)
+                {
+                    dgc.HeaderText = "Location";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_valid_from)
+                {
+                    dgc.HeaderText = "Valid from";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_valid_to)
+                {
+                    dgc.HeaderText = "Valid to";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_status)
+                {
+                    dgc.HeaderText = "Status";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_include_cancelled)
+                {
+                    dgc.HeaderText = "Include cancelled";
+                }
             }
         }
         private void SetLineColor()

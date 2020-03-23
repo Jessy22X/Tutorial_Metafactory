@@ -24,4 +24,25 @@ internal class Defines
         internal static string column_id_location = "id_location";
         internal static string column_id_tank = "id_tank";
     }
+
+    internal class StockDefines
+    {
+        internal static string stock_number = "stock_number";
+        internal static string stock_capacity = "capacity";
+        internal static string stock_id_location = "id_location";
+    }
+
+    internal class TankDefines
+    {
+        internal static string tank_stock_number = "tank_stock_number";
+        internal static string tank_name = "tank_name";
+        internal static string tank_quantity = "quantity";
+        internal static string tank_valid_from = "valid_from";
+        internal static string tank_valid_to = "valid_to";
+    }
+    internal class LocationDefines
+    {
+        internal static string location_name = "location_name";
+      
+    }
 }
