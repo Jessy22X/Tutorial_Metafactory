@@ -40,21 +40,23 @@
             // 
             // m_bAddStock
             // 
-            this.m_bAddStock.Location = new System.Drawing.Point(140, 123);
+            this.m_bAddStock.Location = new System.Drawing.Point(151, 120);
             this.m_bAddStock.Name = "m_bAddStock";
             this.m_bAddStock.Size = new System.Drawing.Size(75, 23);
             this.m_bAddStock.TabIndex = 0;
             this.m_bAddStock.Text = "Add";
             this.m_bAddStock.UseVisualStyleBackColor = true;
+            //this.m_bAddStock.Click += new System.EventHandler(this.m_bAddStock_Click);
             // 
             // m_bCancelStock
             // 
-            this.m_bCancelStock.Location = new System.Drawing.Point(221, 123);
+            this.m_bCancelStock.Location = new System.Drawing.Point(232, 120);
             this.m_bCancelStock.Name = "m_bCancelStock";
             this.m_bCancelStock.Size = new System.Drawing.Size(75, 23);
             this.m_bCancelStock.TabIndex = 1;
             this.m_bCancelStock.Text = "Cancel";
             this.m_bCancelStock.UseVisualStyleBackColor = true;
+            this.m_bCancelStock.Click += new System.EventHandler(this.m_bCancelStock_Click);
             // 
             // l_Stock
             // 
@@ -68,7 +70,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 53);
+            this.label2.Location = new System.Drawing.Point(22, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 13);
             this.label2.TabIndex = 3;
@@ -85,7 +87,7 @@
             // 
             // m_tStockStock
             // 
-            this.m_tStockStock.Location = new System.Drawing.Point(76, 27);
+            this.m_tStockStock.Location = new System.Drawing.Point(76, 24);
             this.m_tStockStock.Name = "m_tStockStock";
             this.m_tStockStock.Size = new System.Drawing.Size(220, 20);
             this.m_tStockStock.TabIndex = 5;
@@ -109,7 +111,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 175);
+            this.ClientSize = new System.Drawing.Size(319, 155);
             this.Controls.Add(this.m_cbStockLocation);
             this.Controls.Add(this.m_tStockCapacity);
             this.Controls.Add(this.m_tStockStock);

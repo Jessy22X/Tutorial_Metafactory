@@ -33,7 +33,7 @@
             this.m_bUpdateLocation = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.m_tbLocation = new System.Windows.Forms.TextBox();
-            this.m_bOkLocation = new System.Windows.Forms.Button();
+            this.m_btOkLocation = new System.Windows.Forms.Button();
             this.m_bCancelLocation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_dgvLocation)).BeginInit();
             this.SuspendLayout();
@@ -41,10 +41,13 @@
             // m_dgvLocation
             // 
             this.m_dgvLocation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.m_dgvLocation.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.m_dgvLocation.Location = new System.Drawing.Point(12, 12);
             this.m_dgvLocation.Name = "m_dgvLocation";
+            this.m_dgvLocation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.m_dgvLocation.Size = new System.Drawing.Size(351, 177);
             this.m_dgvLocation.TabIndex = 0;
+            this.m_dgvLocation.SelectionChanged += new System.EventHandler(this.m_dgvLocation_SelectionChanged);
             // 
             // m_bAddLocation
             // 
@@ -54,6 +57,7 @@
             this.m_bAddLocation.TabIndex = 1;
             this.m_bAddLocation.Text = "Add";
             this.m_bAddLocation.UseVisualStyleBackColor = true;
+            this.m_bAddLocation.Click += new System.EventHandler(this.m_btAddLocation_Click);
             // 
             // m_bUpdateLocation
             // 
@@ -72,7 +76,6 @@
             this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Location name";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // m_tbLocation
             // 
@@ -82,14 +85,15 @@
             this.m_tbLocation.Size = new System.Drawing.Size(237, 20);
             this.m_tbLocation.TabIndex = 4;
             // 
-            // m_bOkLocation
+            // m_btOkLocation
             // 
-            this.m_bOkLocation.Location = new System.Drawing.Point(176, 303);
-            this.m_bOkLocation.Name = "m_bOkLocation";
-            this.m_bOkLocation.Size = new System.Drawing.Size(75, 23);
-            this.m_bOkLocation.TabIndex = 5;
-            this.m_bOkLocation.Text = "Ok";
-            this.m_bOkLocation.UseVisualStyleBackColor = true;
+            this.m_btOkLocation.Location = new System.Drawing.Point(176, 303);
+            this.m_btOkLocation.Name = "m_btOkLocation";
+            this.m_btOkLocation.Size = new System.Drawing.Size(75, 23);
+            this.m_btOkLocation.TabIndex = 5;
+            this.m_btOkLocation.Text = "Ok";
+            this.m_btOkLocation.UseVisualStyleBackColor = true;
+            this.m_btOkLocation.Click += new System.EventHandler(this.m_bOkLocation_Click);
             // 
             // m_bCancelLocation
             // 
@@ -106,7 +110,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 356);
             this.Controls.Add(this.m_bCancelLocation);
-            this.Controls.Add(this.m_bOkLocation);
+            this.Controls.Add(this.m_btOkLocation);
             this.Controls.Add(this.m_tbLocation);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.m_bUpdateLocation);
@@ -114,6 +118,7 @@
             this.Controls.Add(this.m_dgvLocation);
             this.Name = "Location";
             this.Text = "Location";
+            this.Load += new System.EventHandler(this.Location_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_dgvLocation)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -127,7 +132,7 @@
         private System.Windows.Forms.Button m_bUpdateLocation;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox m_tbLocation;
-        private System.Windows.Forms.Button m_bOkLocation;
+        private System.Windows.Forms.Button m_btOkLocation;
         private System.Windows.Forms.Button m_bCancelLocation;
     }
 }

@@ -8,14 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Defines;
+using static Defines.LocationDefines;
 using static Defines.SearchDefines;
 
 namespace StockManagement
 {
     public partial class StockManagement : Form
     {
-
         DBTools m_dbTools = null;
+        DateTimePickerFormat m_defaultDateTimePickerFormat = DateTimePickerFormat.Short;
+
 
         public StockManagement()
         {
@@ -23,7 +25,7 @@ namespace StockManagement
             m_dbTools = new DBTools();
         }
 
-        DateTimePickerFormat m_defaultDateTimePickerFormat = DateTimePickerFormat.Short;
+        #region Methodes
 
         private void ClearCriteria()
         {
@@ -42,45 +44,32 @@ namespace StockManagement
             m_dtValidTo.Format = m_defaultDateTimePickerFormat;
             m_dtValidTo.CustomFormat = " ";
         }
-
-        private void m_dtValidFrom_ValueChanged(object sender, EventArgs e)
+        private void InitComboLocation()
         {
-            m_dtValidFrom.Format = m_defaultDateTimePickerFormat;
+            if(m_dbTools.Criteria != null)
+            {
+                m_cbLocation.DataSource = m_dbTools.Criteria;
+                m_cbLocation.ValueMember = "id_location";
+                m_cbLocation.DisplayMember = "location_name";
+            }
         }
-
-        private void StockManagement_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void m_bClearCriteria_Click(object sender, EventArgs e)
-        {
-            ClearCriteria();
-        }
-
         private void OnSearch()
         {
-            DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text)
-            ? null
-            : (DateTime?)m_dtValidFrom.Value;
-            DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text)
-            ? null
-            : (DateTime?)m_dtValidTo.Value;
+            DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text) ? null : (DateTime?)m_dtValidFrom.Value;
+            DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text) ? null : (DateTime?)m_dtValidTo.Value;
+
             m_dbTools.AddRowToTableCriteria(m_tbStockNumber.Text, m_tbTankName.Text,
-            validDateFrom, validDateTo, m_cbLocation.SelectedIndex,
-            m_ckIncludingCancelledCnt.Checked ? "A" : "C");
+                validDateFrom, validDateTo, m_cbLocation.SelectedIndex,
+                m_ckIncludingCancelledCnt.Checked ? "A" : "C");
 
             m_dbTools.Search();
+
             if (m_dbTools.SearchResult != null)
             {
                 BindingSource SBind = new BindingSource();
                 SBind.DataSource = m_dbTools.SearchResult;
                 m_grResults.DataSource = SBind;
+
                 SetHeaderColumns();
                 SetLineColor();
             }
@@ -90,11 +79,11 @@ namespace StockManagement
         {
             foreach (DataGridViewColumn dgc in m_grResults.Columns)
             {
-                if(dgc.DataPropertyName == SearchDefines.column_id_location ||dgc.DataPropertyName == SearchDefines.column_id_tank)
+                if (dgc.DataPropertyName == SearchDefines.column_id_location || dgc.DataPropertyName == SearchDefines.column_id_tank)
                 {
                     dgc.Visible = false;
                 }
-                if(dgc.DataPropertyName == SearchDefines.column_tank_name)
+                if (dgc.DataPropertyName == SearchDefines.column_tank_name)
                 {
                     dgc.HeaderText = "Tank name";
                 }
@@ -114,14 +103,7 @@ namespace StockManagement
                 {
                     dgc.HeaderText = "Valid to";
                 }
-                if (dgc.DataPropertyName == SearchDefines.column_status)
-                {
-                    dgc.HeaderText = "Status";
-                }
-                if (dgc.DataPropertyName == SearchDefines.column_include_cancelled)
-                {
-                    dgc.HeaderText = "Include cancelled";
-                }
+               
             }
         }
         private void SetLineColor()
@@ -135,9 +117,44 @@ namespace StockManagement
             }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
+        #endregion
+
+        #region Events
+        private void StockManagement_Load(object sender, EventArgs e)
+        {
+            InitComboLocation();
         }
+
+        private void m_dtValidFrom_ValueChanged(object sender, EventArgs e)
+        {
+            m_dtValidFrom.Format = m_defaultDateTimePickerFormat;
+        }
+
+        private void m_dtValidTo_ValueChanged(object sender, EventArgs e)
+        {
+            m_dtValidTo.Format = m_defaultDateTimePickerFormat;
+        }
+        
+        private void m_bClearCriteria_Click(object sender, EventArgs e)
+        {
+            ClearCriteria();
+        }
+
+        private void m_bSearch_Click(object sender, EventArgs e)
+        {
+            OnSearch();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stock myStock = new Stock(m_dbTools);
+            myStock.Show();
+        }
+
+
+        #endregion
+
+       
     }
 }

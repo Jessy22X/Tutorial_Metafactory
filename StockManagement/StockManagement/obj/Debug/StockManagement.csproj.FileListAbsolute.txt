@@ -26,3 +26,6 @@ C:\Users\jessx\source\repos\Tutorial_Metafactory\StockManagement\StockManagement
 C:\Users\jessx\source\repos\Tutorial_Metafactory\StockManagement\StockManagement\obj\Debug\StockManagement.Location.resources
 C:\Users\jessx\source\repos\Tutorial_Metafactory\StockManagement\StockManagement\obj\Debug\StockManagement.Stock.resources
 C:\Users\jessx\source\repos\Tutorial_Metafactory\StockManagement\StockManagement\obj\Debug\StockManagement.Tank.resources
+C:\Users\vvakh\Documents\Tutorial_Metafactory_Jessy_XIONG\Tutorial_Metafactory\StockManagement\StockManagement\bin\Debug\StockManagement.exe.config
+C:\Users\vvakh\Documents\Tutorial_Metafactory_Jessy_XIONG\Tutorial_Metafactory\StockManagement\StockManagement\obj\Debug\StockManagement.exe
+C:\Users\vvakh\Documents\Tutorial_Metafactory_Jessy_XIONG\Tutorial_Metafactory\StockManagement\StockManagement\obj\Debug\StockManagement.pdb

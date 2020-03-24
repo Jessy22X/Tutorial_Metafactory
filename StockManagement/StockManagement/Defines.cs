@@ -43,6 +43,6 @@ internal class Defines
     internal class LocationDefines
     {
         internal static string location_name = "location_name";
-      
+        internal enum Mode { View, Add, Update };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 using static Defines;
 
 namespace StockManagement
@@ -13,8 +14,13 @@ namespace StockManagement
         private DataTable m_dtSearchResult = null;
         private DataTable m_dtCriteria = null;
         private DataTable m_dtLocation = null;
+        internal object location;
 
-        private DBTools m_dbTools;
+        public DBTools()
+        {
+            Criteria = CreateTableCriteria();
+            GetLocation();
+        }
 
         public DataTable SearchResult
         {
@@ -54,18 +60,25 @@ namespace StockManagement
             }
         }
 
-        internal bool CreateTableCriteria()
+        internal DataTable CreateTableCriteria()
         {
-            DataTable myTable = new DataTable();
+            if(Criteria != null)
+            {
+                return Criteria;
+            }
+            else
+            {
+                DataTable myTable = new DataTable();
+                myTable.Columns.Add(CriteriaDefines.criterium_stock_number, typeof(string));
 
-            return true;
+                Criteria = myTable;
+                return Criteria;
+            }
         }
 
-        internal bool AddRowToTableCriteria(string s_contractNumner, string s_tankName, DateTime? dt_validFrom, DateTime? dt_validTo, int i_idLocation, string s_includeCancelled)
+        internal bool AddRowToTableCriteria(string sContractNumber, string sTankName, DateTime? dt_validFrom, DateTime? dt_validTo, int i_idLocation, string s_includeCancelled)
         {
-            DataSet newCriteria = new DataSet();
-            DataTable criteriaTable = newCriteria.Tables.Add("CriteriaTable");
-
+            Criteria.Rows.Add(sContractNumber, sTankName, dt_validFrom, dt_validTo, i_idLocation, s_includeCancelled);
             return true;
         }
 
@@ -155,12 +168,72 @@ namespace StockManagement
             return true;
         }
 
+        // Méthode pour l'ajout d'une ligne dans la table Stock
         internal bool AddRowToStock(int i_stock_number, decimal? d_stock_capacity, int i_id_location)
         {
-            DataSet newStock = new DataSet();
-            DataTable stockTable = newStock.Tables.Add("stock");
+            bool bIsOK = false;
+            try
+            {
+               
+                using (SqlConnection conn = new SqlConnection(m_sConnection))
+                {
+                    conn.Open();
 
-            return true;
+                    
+                    //set stored procedure name
+                    string spName = @"dbo.[STOCK_MANAGEMENT_ADD_STOCK]";
+
+                    //define the SqlCommand object
+                    SqlCommand cmd = new SqlCommand(spName, conn);
+
+                    //Set SqlParameter - the employee id parameter value will be set from the command line
+                    SqlParameter paramStockNumber = new SqlParameter("@stock_number", SqlDbType.NVarChar);
+                    paramStockNumber.Value = i_stock_number;
+
+                    SqlParameter paramTankName = new SqlParameter("@capacity", SqlDbType.Decimal);
+                    paramTankName.Value = d_stock_capacity;
+
+                    SqlParameter paramLocation = new SqlParameter("@id_location", SqlDbType.Int);
+                    paramLocation.Value = i_id_location;
+                    
+
+                    //add the parameter to the SqlCommand object
+                    cmd.Parameters.Add(paramStockNumber);
+                    cmd.Parameters.Add(paramTankName);
+                    cmd.Parameters.Add(paramLocation);
+
+                    //set the SqlCommand type to stored procedure and execute
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    Console.WriteLine(Environment.NewLine + "Retrieving data from database..." + Environment.NewLine);
+
+                    //check if there are records
+                    if (dr.HasRows)
+                    {
+                        string sError = dr.GetValue(0).ToString();
+                        MessageBox.Show(sError, "Error");
+                    }
+                    else
+                    {
+                        bIsOK = true;
+                    }
+
+                    //close datik a reader
+                    dr.Close();
+
+                    //close connection
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //display error message
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+
+
+            return bIsOK;
         }
 
         internal bool AddRowToTank(int i_id_stock, string s_tank_name, decimal? d_quantity, DateTime? dt_valid_from, DateTime? dt_valid_to)
@@ -179,29 +252,20 @@ namespace StockManagement
             return true;
         }
 
-        internal bool ShowAllLocation()
+        internal bool GetLocation()
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(m_sConnection))
                 {
                     conn.Open();
-                    DataRow drLocation = m_dtLocation.Rows[0];
-                    string sLocationName = drLocation.Field<string>(LocationDefines.location_name);
-
+                    
                     //set stored procedure name
-                    string spName = @"dbo.[LOCATION_NAME_SEARCH]";
+                    string spName = @"dbo.[STOCK_MANAGEMENT_GET_LOCATION]";
 
                     //define the SqlCommand object
                     SqlCommand cmd = new SqlCommand(spName, conn);
-
-                    //Set SqlParameter - the employee id parameter value will be set from the command line
-                    SqlParameter paramLocationName = new SqlParameter("@location_name", SqlDbType.NVarChar);
-                    paramLocationName.Value = sLocationName;
-
-                    //add the parameter to the SqlCommand object
-                    cmd.Parameters.Add(paramLocationName);
-
+                    
                     //set the SqlCommand type to stored procedure and execute
                     cmd.CommandType = CommandType.StoredProcedure;
                     SqlDataReader dr = cmd.ExecuteReader();
@@ -211,7 +275,7 @@ namespace StockManagement
                     //check if there are records
                     if (dr.HasRows)
                     {
-                        SearchResult.Load(dr);
+                        Location.Load(dr);
                     }
                     else
                     {
@@ -231,6 +295,123 @@ namespace StockManagement
             }
 
             return true;
+        }
+
+        internal bool AddLocation(string sLocation_name)
+        {
+
+            bool bIsOK = false;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(m_sConnection))
+                {
+                    conn.Open();
+
+
+                    //set stored procedure name
+                    string spName = @"dbo.[STOCK_MANAGEMENT_ADD_LOCATION]";
+
+                    //define the SqlCommand object
+                    SqlCommand cmd = new SqlCommand(spName, conn);
+
+                    //Set SqlParameter - the employee id parameter value will be set from the command line
+                    SqlParameter paramLocation = new SqlParameter("@location_name", SqlDbType.NVarChar);
+                    paramLocation.Value = sLocation_name;
+
+                    //add the parameter to the SqlCommand object
+                    cmd.Parameters.Add(paramLocation);
+
+                    //set the SqlCommand type to stored procedure and execute
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    Console.WriteLine(Environment.NewLine + "Retrieving data from database..." + Environment.NewLine);
+
+                    //check if there are records
+                    if (dr.HasRows)
+                    {
+                        string sError = dr.GetValue(0).ToString();
+                        MessageBox.Show(sError, "Error");
+                    }
+                    else
+                    {
+                        bIsOK = true;
+                    }
+
+                    //close datik a reader
+                    dr.Close();
+
+                    //close connection
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //display error message
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+
+            return bIsOK;
+        }
+
+        internal bool UpdateLocation(int iIdLocation, string sLocation_name)
+        {
+
+            bool bIsOK = false;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(m_sConnection))
+                {
+                    conn.Open();
+
+
+                    //set stored procedure name
+                    string spName = @"dbo.[STOCK_MANAGEMENT_UPDATE_LOCATION]";
+
+                    //define the SqlCommand object
+                    SqlCommand cmd = new SqlCommand(spName, conn);
+
+                    //Set SqlParameter - the employee id parameter value will be set from the command line
+                    SqlParameter paramIdLocation = new SqlParameter("@id_location", SqlDbType.NVarChar);
+                    paramIdLocation.Value = iIdLocation;
+                    SqlParameter paramLocationName = new SqlParameter("@location_name", SqlDbType.NVarChar);
+                    paramLocationName.Value = sLocation_name;
+
+                    //add the parameter to the SqlCommand object
+                    cmd.Parameters.Add(paramIdLocation);
+                    cmd.Parameters.Add(paramLocationName);
+
+                    //set the SqlCommand type to stored procedure and execute
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    Console.WriteLine(Environment.NewLine + "Retrieving data from database..." + Environment.NewLine);
+
+                    //check if there are records
+                    if (dr.HasRows)
+                    {
+                        string sError = dr.GetValue(0).ToString();
+                        MessageBox.Show(sError, "Error");
+                    }
+                    else
+                    {
+                        bIsOK = true;
+                    }
+
+                    //close datik a reader
+                    dr.Close();
+
+                    //close connection
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //display error message
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+
+            return bIsOK;
         }
 
     }
