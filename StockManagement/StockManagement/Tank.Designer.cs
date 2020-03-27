@@ -37,7 +37,7 @@
             this.m_tTankName = new System.Windows.Forms.TextBox();
             this.m_tTankQuantity = new System.Windows.Forms.TextBox();
             this.m_dtTankValidFrom = new System.Windows.Forms.DateTimePicker();
-            this.m_dtValidTo = new System.Windows.Forms.DateTimePicker();
+            this.m_dtTankValidTo = new System.Windows.Forms.DateTimePicker();
             this.m_bAddTank = new System.Windows.Forms.Button();
             this.m_bCancelTank = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -108,22 +108,26 @@
             this.m_tTankQuantity.Name = "m_tTankQuantity";
             this.m_tTankQuantity.Size = new System.Drawing.Size(173, 20);
             this.m_tTankQuantity.TabIndex = 7;
+            this.m_tTankQuantity.TextChanged += new System.EventHandler(this.m_tTankQuantity_TextChanged);
             // 
             // m_dtTankValidFrom
             // 
+            this.m_dtTankValidFrom.Enabled = false;
             this.m_dtTankValidFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.m_dtTankValidFrom.Location = new System.Drawing.Point(189, 101);
             this.m_dtTankValidFrom.Name = "m_dtTankValidFrom";
             this.m_dtTankValidFrom.Size = new System.Drawing.Size(94, 20);
             this.m_dtTankValidFrom.TabIndex = 10;
+            this.m_dtTankValidFrom.UseWaitCursor = true;
             // 
-            // m_dtValidTo
+            // m_dtTankValidTo
             // 
-            this.m_dtValidTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.m_dtValidTo.Location = new System.Drawing.Point(189, 127);
-            this.m_dtValidTo.Name = "m_dtValidTo";
-            this.m_dtValidTo.Size = new System.Drawing.Size(94, 20);
-            this.m_dtValidTo.TabIndex = 11;
+            this.m_dtTankValidTo.Enabled = false;
+            this.m_dtTankValidTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.m_dtTankValidTo.Location = new System.Drawing.Point(189, 127);
+            this.m_dtTankValidTo.Name = "m_dtTankValidTo";
+            this.m_dtTankValidTo.Size = new System.Drawing.Size(94, 20);
+            this.m_dtTankValidTo.TabIndex = 11;
             // 
             // m_bAddTank
             // 
@@ -133,6 +137,7 @@
             this.m_bAddTank.TabIndex = 12;
             this.m_bAddTank.Text = "Add";
             this.m_bAddTank.UseVisualStyleBackColor = true;
+            this.m_bAddTank.Click += new System.EventHandler(this.m_bAddTank_Click);
             // 
             // m_bCancelTank
             // 
@@ -142,6 +147,7 @@
             this.m_bCancelTank.TabIndex = 13;
             this.m_bCancelTank.Text = "Cancel";
             this.m_bCancelTank.UseVisualStyleBackColor = true;
+            this.m_bCancelTank.Click += new System.EventHandler(this.m_bCancelTank_Click);
             // 
             // Tank
             // 
@@ -150,7 +156,7 @@
             this.ClientSize = new System.Drawing.Size(320, 207);
             this.Controls.Add(this.m_bCancelTank);
             this.Controls.Add(this.m_bAddTank);
-            this.Controls.Add(this.m_dtValidTo);
+            this.Controls.Add(this.m_dtTankValidTo);
             this.Controls.Add(this.m_dtTankValidFrom);
             this.Controls.Add(this.m_tTankQuantity);
             this.Controls.Add(this.m_tTankName);
@@ -161,7 +167,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Tank";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tank";
+            this.Load += new System.EventHandler(this.Tank_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,7 +186,7 @@
         private System.Windows.Forms.TextBox m_tTankName;
         private System.Windows.Forms.TextBox m_tTankQuantity;
         private System.Windows.Forms.DateTimePicker m_dtTankValidFrom;
-        private System.Windows.Forms.DateTimePicker m_dtValidTo;
+        private System.Windows.Forms.DateTimePicker m_dtTankValidTo;
         private System.Windows.Forms.Button m_bAddTank;
         private System.Windows.Forms.Button m_bCancelTank;
     }

@@ -17,12 +17,15 @@ namespace StockManagement
     {
         DBTools m_dbTools = null;
         DateTimePickerFormat m_defaultDateTimePickerFormat = DateTimePickerFormat.Short;
-
+        private DataTable m_dtLocation = null;
+        private DataTable m_dtStock = null;
 
         public StockManagement()
         {
             InitializeComponent();
             m_dbTools = new DBTools();
+            m_dtLocation = m_dbTools.Location;
+            m_dtStock = m_dbTools.Stock;
         }
 
         #region Methodes
@@ -31,9 +34,9 @@ namespace StockManagement
         {
             m_tbStockNumber.Text = string.Empty;
             m_tbTankName.Text = string.Empty;
-            m_cbLocation.SelectedValue = null;
-            m_dtValidFrom.Format = DateTimePickerFormat.Custom;
-            m_dtValidTo.Format = DateTimePickerFormat.Custom;
+            m_cbLocation.SelectedItem = null;
+            m_dtValidFrom.Format = DateTimePickerFormat.Short;
+            m_dtValidTo.Format = DateTimePickerFormat.Short;
             m_ckIncludingCancelledCnt.Checked = false;
         }
 
@@ -46,21 +49,21 @@ namespace StockManagement
         }
         private void InitComboLocation()
         {
-            if(m_dbTools.Criteria != null)
+            if(m_dtLocation != null && m_dtLocation.Rows.Count > 0)
             {
-                m_cbLocation.DataSource = m_dbTools.Criteria;
+                m_cbLocation.DataSource = m_dtLocation;
                 m_cbLocation.ValueMember = "id_location";
                 m_cbLocation.DisplayMember = "location_name";
             }
         }
         private void OnSearch()
         {
-            DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text) ? null : (DateTime?)m_dtValidFrom.Value;
-            DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text) ? null : (DateTime?)m_dtValidTo.Value;
+            DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text) ? new DateTime(2001,1,1) : (DateTime?)m_dtValidFrom.Value;
+            DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text) ? new DateTime(2001, 1, 1) : (DateTime?)m_dtValidTo.Value;
+            int? iIdLocation = m_cbLocation.SelectedValue == null ? 0 : Convert.ToInt32(m_cbLocation.SelectedValue);
 
-            m_dbTools.AddRowToTableCriteria(m_tbStockNumber.Text, m_tbTankName.Text,
-                validDateFrom, validDateTo, m_cbLocation.SelectedIndex,
-                m_ckIncludingCancelledCnt.Checked ? "A" : "C");
+            
+            m_dbTools.AddRowToTableCriteria(m_tbStockNumber.Text, m_tbTankName.Text, validDateFrom, validDateTo, iIdLocation, m_ckIncludingCancelledCnt.Checked ? "Y" : "N");
 
             m_dbTools.Search();
 
@@ -69,7 +72,6 @@ namespace StockManagement
                 BindingSource SBind = new BindingSource();
                 SBind.DataSource = m_dbTools.SearchResult;
                 m_grResults.DataSource = SBind;
-
                 SetHeaderColumns();
                 SetLineColor();
             }
@@ -79,7 +81,11 @@ namespace StockManagement
         {
             foreach (DataGridViewColumn dgc in m_grResults.Columns)
             {
-                if (dgc.DataPropertyName == SearchDefines.column_id_location || dgc.DataPropertyName == SearchDefines.column_id_tank)
+                if (dgc.DataPropertyName == SearchDefines.column_id_stock || dgc.DataPropertyName == SearchDefines.column_id_stock)
+                {
+                    dgc.Visible = false;
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_id_tank || dgc.DataPropertyName == SearchDefines.column_id_tank)
                 {
                     dgc.Visible = false;
                 }
@@ -110,13 +116,16 @@ namespace StockManagement
         {
             foreach (DataGridViewRow dgr in m_grResults.Rows)
             {
-                DataRow dr = ((DataRowView)dgr.DataBoundItem).Row;
-                string sStatus = dr.Field<string>(SearchDefines.column_status);
-                if (!string.IsNullOrEmpty(sStatus) && sStatus == "C")
-                    dgr.DefaultCellStyle.BackColor = Color.Red;
+                DataRowView dgv = dgr.DataBoundItem as DataRowView;
+                if(dgv != null)
+                {
+                    DataRow dr = dgv.Row;
+                    string sStatus = dr.Field<string>(SearchDefines.column_status);
+                    if (!string.IsNullOrEmpty(sStatus) && sStatus == "C")
+                        dgr.DefaultCellStyle.BackColor = Color.Red;
+                }                
             }
         }
-
 
         #endregion
 
@@ -124,6 +133,7 @@ namespace StockManagement
         private void StockManagement_Load(object sender, EventArgs e)
         {
             InitComboLocation();
+            InitDatePickerFormat();
         }
 
         private void m_dtValidFrom_ValueChanged(object sender, EventArgs e)
@@ -148,13 +158,22 @@ namespace StockManagement
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Stock myStock = new Stock(m_dbTools);
+            Stock myStock = new Stock(m_dtStock, m_dbTools);
             myStock.Show();
         }
 
+        private void locationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Location myLocation = new Location(m_dtLocation, m_dbTools);
+            myLocation.Show();
+        }
 
         #endregion
 
-       
+        private void newToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Tank myTank = new Tank(m_dbTools);
+            myTank.Show();
+        }
     }
 }

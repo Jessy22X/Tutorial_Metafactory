@@ -81,13 +81,13 @@
             this.stockToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem});
             this.stockToolStripMenuItem.Name = "stockToolStripMenuItem";
-            this.stockToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stockToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.stockToolStripMenuItem.Text = "Stock";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -96,7 +96,7 @@
             this.tankToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem1});
             this.tankToolStripMenuItem.Name = "tankToolStripMenuItem";
-            this.tankToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tankToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.tankToolStripMenuItem.Text = "Tank";
             // 
             // newToolStripMenuItem1
@@ -104,12 +104,14 @@
             this.newToolStripMenuItem1.Name = "newToolStripMenuItem1";
             this.newToolStripMenuItem1.Size = new System.Drawing.Size(98, 22);
             this.newToolStripMenuItem1.Text = "New";
+            this.newToolStripMenuItem1.Click += new System.EventHandler(this.newToolStripMenuItem1_Click);
             // 
             // locationToolStripMenuItem
             // 
             this.locationToolStripMenuItem.Name = "locationToolStripMenuItem";
-            this.locationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.locationToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.locationToolStripMenuItem.Text = "Location";
+            this.locationToolStripMenuItem.Click += new System.EventHandler(this.locationToolStripMenuItem_Click);
             // 
             // groupBox1
             // 
@@ -247,6 +249,8 @@
             // 
             // m_grResults
             // 
+            this.m_grResults.AllowUserToAddRows = false;
+            this.m_grResults.AllowUserToDeleteRows = false;
             this.m_grResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.m_grResults.Location = new System.Drawing.Point(12, 120);
             this.m_grResults.Name = "m_grResults";
@@ -263,6 +267,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "StockManagement";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Stock management";
             this.Load += new System.EventHandler(this.StockManagement_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -281,7 +286,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DateTimePicker m_dtValidFrom;
-        private System.Windows.Forms.ComboBox m_cbLocation;
         private System.Windows.Forms.TextBox m_tbTankName;
         private System.Windows.Forms.TextBox m_tbStockNumber;
         private System.Windows.Forms.DateTimePicker m_dtValidTo;
@@ -299,6 +303,7 @@
         private System.Windows.Forms.ToolStripMenuItem tankToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem locationToolStripMenuItem;
+        private System.Windows.Forms.ComboBox m_cbLocation;
     }
 }
 

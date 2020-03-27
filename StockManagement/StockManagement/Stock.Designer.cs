@@ -33,8 +33,8 @@
             this.l_Stock = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.m_tStockStock = new System.Windows.Forms.TextBox();
-            this.m_tStockCapacity = new System.Windows.Forms.TextBox();
+            this.m_tbStockNumber = new System.Windows.Forms.TextBox();
+            this.m_tbStockCapacity = new System.Windows.Forms.TextBox();
             this.m_cbStockLocation = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
@@ -46,7 +46,7 @@
             this.m_bAddStock.TabIndex = 0;
             this.m_bAddStock.Text = "Add";
             this.m_bAddStock.UseVisualStyleBackColor = true;
-            //this.m_bAddStock.Click += new System.EventHandler(this.m_bAddStock_Click);
+            this.m_bAddStock.Click += new System.EventHandler(this.m_bAddStock_Click);
             // 
             // m_bCancelStock
             // 
@@ -85,19 +85,19 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Location";
             // 
-            // m_tStockStock
+            // m_tbStockNumber
             // 
-            this.m_tStockStock.Location = new System.Drawing.Point(76, 24);
-            this.m_tStockStock.Name = "m_tStockStock";
-            this.m_tStockStock.Size = new System.Drawing.Size(220, 20);
-            this.m_tStockStock.TabIndex = 5;
+            this.m_tbStockNumber.Location = new System.Drawing.Point(76, 24);
+            this.m_tbStockNumber.Name = "m_tbStockNumber";
+            this.m_tbStockNumber.Size = new System.Drawing.Size(220, 20);
+            this.m_tbStockNumber.TabIndex = 5;
             // 
-            // m_tStockCapacity
+            // m_tbStockCapacity
             // 
-            this.m_tStockCapacity.Location = new System.Drawing.Point(76, 53);
-            this.m_tStockCapacity.Name = "m_tStockCapacity";
-            this.m_tStockCapacity.Size = new System.Drawing.Size(220, 20);
-            this.m_tStockCapacity.TabIndex = 6;
+            this.m_tbStockCapacity.Location = new System.Drawing.Point(76, 53);
+            this.m_tbStockCapacity.Name = "m_tbStockCapacity";
+            this.m_tbStockCapacity.Size = new System.Drawing.Size(220, 20);
+            this.m_tbStockCapacity.TabIndex = 6;
             // 
             // m_cbStockLocation
             // 
@@ -113,15 +113,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(319, 155);
             this.Controls.Add(this.m_cbStockLocation);
-            this.Controls.Add(this.m_tStockCapacity);
-            this.Controls.Add(this.m_tStockStock);
+            this.Controls.Add(this.m_tbStockCapacity);
+            this.Controls.Add(this.m_tbStockNumber);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.l_Stock);
             this.Controls.Add(this.m_bCancelStock);
             this.Controls.Add(this.m_bAddStock);
             this.Name = "Stock";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Stock";
+            this.Load += new System.EventHandler(this.Stock_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,8 +136,8 @@
         private System.Windows.Forms.Label l_Stock;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox m_tStockStock;
-        private System.Windows.Forms.TextBox m_tStockCapacity;
+        private System.Windows.Forms.TextBox m_tbStockNumber;
+        private System.Windows.Forms.TextBox m_tbStockCapacity;
         private System.Windows.Forms.ComboBox m_cbStockLocation;
     }
 }
