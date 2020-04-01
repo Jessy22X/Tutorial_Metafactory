@@ -96,6 +96,8 @@ namespace StockManagement
             }
         }
 
+        #region Criteria
+
         internal DataTable CreateTableCriteria()
         {
             if(Criteria != null)
@@ -122,6 +124,8 @@ namespace StockManagement
             Criteria.Rows.Add(iIdStock, sTankName, dtValidFrom, dtValidTo, iIdLocation, sIncludeCancelled);
             return true;
         }
+
+        #endregion
 
         internal bool Search()
         {

@@ -130,6 +130,8 @@ namespace StockManagement
                 }
                 else
                     Console.WriteLine("error");
+
+                this.Close();
             }
         }
 
