@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.m_bAddStock = new System.Windows.Forms.Button();
+            this.m_btOkStock = new System.Windows.Forms.Button();
             this.m_bCancelStock = new System.Windows.Forms.Button();
             this.l_Stock = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.m_tbStockNumber = new System.Windows.Forms.TextBox();
             this.m_tbStockCapacity = new System.Windows.Forms.TextBox();
             this.m_cbStockLocation = new System.Windows.Forms.ComboBox();
+            this.m_tbStockNumber = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // m_bAddStock
+            // m_btOkStock
             // 
-            this.m_bAddStock.Location = new System.Drawing.Point(151, 120);
-            this.m_bAddStock.Name = "m_bAddStock";
-            this.m_bAddStock.Size = new System.Drawing.Size(75, 23);
-            this.m_bAddStock.TabIndex = 0;
-            this.m_bAddStock.Text = "Add";
-            this.m_bAddStock.UseVisualStyleBackColor = true;
-            this.m_bAddStock.Click += new System.EventHandler(this.m_bAddStock_Click);
+            this.m_btOkStock.Location = new System.Drawing.Point(151, 120);
+            this.m_btOkStock.Name = "m_btOkStock";
+            this.m_btOkStock.Size = new System.Drawing.Size(75, 23);
+            this.m_btOkStock.TabIndex = 0;
+            this.m_btOkStock.Text = "Ok";
+            this.m_btOkStock.UseVisualStyleBackColor = true;
+            this.m_btOkStock.Click += new System.EventHandler(this.m_btOkStock_Click);
             // 
             // m_bCancelStock
             // 
@@ -85,13 +85,6 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Location";
             // 
-            // m_tbStockNumber
-            // 
-            this.m_tbStockNumber.Location = new System.Drawing.Point(76, 24);
-            this.m_tbStockNumber.Name = "m_tbStockNumber";
-            this.m_tbStockNumber.Size = new System.Drawing.Size(220, 20);
-            this.m_tbStockNumber.TabIndex = 5;
-            // 
             // m_tbStockCapacity
             // 
             this.m_tbStockCapacity.Location = new System.Drawing.Point(76, 53);
@@ -107,6 +100,13 @@
             this.m_cbStockLocation.Size = new System.Drawing.Size(220, 21);
             this.m_cbStockLocation.TabIndex = 7;
             // 
+            // m_tbStockNumber
+            // 
+            this.m_tbStockNumber.Location = new System.Drawing.Point(76, 24);
+            this.m_tbStockNumber.Name = "m_tbStockNumber";
+            this.m_tbStockNumber.Size = new System.Drawing.Size(220, 20);
+            this.m_tbStockNumber.TabIndex = 5;
+            // 
             // Stock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -119,7 +119,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.l_Stock);
             this.Controls.Add(this.m_bCancelStock);
-            this.Controls.Add(this.m_bAddStock);
+            this.Controls.Add(this.m_btOkStock);
             this.Name = "Stock";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Stock";
@@ -131,13 +131,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Button m_bAddStock;
+        private System.Windows.Forms.Button m_btOkStock;
         private System.Windows.Forms.Button m_bCancelStock;
         private System.Windows.Forms.Label l_Stock;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox m_tbStockNumber;
         private System.Windows.Forms.TextBox m_tbStockCapacity;
         private System.Windows.Forms.ComboBox m_cbStockLocation;
+        private System.Windows.Forms.TextBox m_tbStockNumber;
     }
 }

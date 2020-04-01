@@ -38,7 +38,7 @@
             this.m_tTankQuantity = new System.Windows.Forms.TextBox();
             this.m_dtTankValidFrom = new System.Windows.Forms.DateTimePicker();
             this.m_dtTankValidTo = new System.Windows.Forms.DateTimePicker();
-            this.m_bAddTank = new System.Windows.Forms.Button();
+            this.m_bOkTank = new System.Windows.Forms.Button();
             this.m_bCancelTank = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -129,15 +129,15 @@
             this.m_dtTankValidTo.Size = new System.Drawing.Size(94, 20);
             this.m_dtTankValidTo.TabIndex = 11;
             // 
-            // m_bAddTank
+            // m_bOkTank
             // 
-            this.m_bAddTank.Location = new System.Drawing.Point(127, 165);
-            this.m_bAddTank.Name = "m_bAddTank";
-            this.m_bAddTank.Size = new System.Drawing.Size(75, 23);
-            this.m_bAddTank.TabIndex = 12;
-            this.m_bAddTank.Text = "Add";
-            this.m_bAddTank.UseVisualStyleBackColor = true;
-            this.m_bAddTank.Click += new System.EventHandler(this.m_bAddTank_Click);
+            this.m_bOkTank.Location = new System.Drawing.Point(127, 165);
+            this.m_bOkTank.Name = "m_bOkTank";
+            this.m_bOkTank.Size = new System.Drawing.Size(75, 23);
+            this.m_bOkTank.TabIndex = 12;
+            this.m_bOkTank.Text = "Ok";
+            this.m_bOkTank.UseVisualStyleBackColor = true;
+            this.m_bOkTank.Click += new System.EventHandler(this.m_bOkTank_Click);
             // 
             // m_bCancelTank
             // 
@@ -155,7 +155,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(320, 207);
             this.Controls.Add(this.m_bCancelTank);
-            this.Controls.Add(this.m_bAddTank);
+            this.Controls.Add(this.m_bOkTank);
             this.Controls.Add(this.m_dtTankValidTo);
             this.Controls.Add(this.m_dtTankValidFrom);
             this.Controls.Add(this.m_tTankQuantity);
@@ -187,7 +187,7 @@
         private System.Windows.Forms.TextBox m_tTankQuantity;
         private System.Windows.Forms.DateTimePicker m_dtTankValidFrom;
         private System.Windows.Forms.DateTimePicker m_dtTankValidTo;
-        private System.Windows.Forms.Button m_bAddTank;
+        private System.Windows.Forms.Button m_bOkTank;
         private System.Windows.Forms.Button m_bCancelTank;
     }
 }

@@ -8,8 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Defines;
-using static Defines.LocationDefines;
-using static Defines.SearchDefines;
 
 namespace StockManagement
 {
@@ -32,14 +30,14 @@ namespace StockManagement
 
         private void ClearCriteria()
         {
-            m_tbStockNumber.Text = string.Empty;
+            m_cbStock.Text = string.Empty;
             m_tbTankName.Text = string.Empty;
             m_cbLocation.SelectedItem = null;
-            m_dtValidFrom.Format = DateTimePickerFormat.Short;
-            m_dtValidTo.Format = DateTimePickerFormat.Short;
+            m_dtValidFrom.Format = DateTimePickerFormat.Custom;
+            m_dtValidTo.Format = DateTimePickerFormat.Custom;
             m_ckIncludingCancelledCnt.Checked = false;
         }
-
+        #region Initialisation StockManagement
         private void InitDatePickerFormat()
         {
             m_dtValidFrom.Format = m_defaultDateTimePickerFormat;
@@ -56,14 +54,28 @@ namespace StockManagement
                 m_cbLocation.DisplayMember = "location_name";
             }
         }
+
+        private void InitComboStock()
+        {
+            if (m_dtStock != null && m_dtStock.Rows.Count > 0)
+            {
+                m_cbStock.DataSource = m_dtStock;
+                m_cbStock.ValueMember = "id_stock";
+                m_cbStock.DisplayMember = "stock_number";
+            }
+        }
+
+        #endregion
+
         private void OnSearch()
         {
             DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text) ? new DateTime(2001,1,1) : (DateTime?)m_dtValidFrom.Value;
             DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text) ? new DateTime(2001, 1, 1) : (DateTime?)m_dtValidTo.Value;
             int? iIdLocation = m_cbLocation.SelectedValue == null ? 0 : Convert.ToInt32(m_cbLocation.SelectedValue);
+            int? iIdStock = m_cbStock.SelectedValue == null ? 0 : Convert.ToInt32(m_cbStock.SelectedValue);
 
-            
-            m_dbTools.AddRowToTableCriteria(m_tbStockNumber.Text, m_tbTankName.Text, validDateFrom, validDateTo, iIdLocation, m_ckIncludingCancelledCnt.Checked ? "Y" : "N");
+
+            m_dbTools.AddRowToTableCriteria(iIdStock, m_tbTankName.Text, validDateFrom, validDateTo, iIdLocation, m_ckIncludingCancelledCnt.Checked ? "Y" : "N");
 
             m_dbTools.Search();
 
@@ -130,10 +142,15 @@ namespace StockManagement
         #endregion
 
         #region Events
+
+        #region StockManagement Events
         private void StockManagement_Load(object sender, EventArgs e)
         {
             InitComboLocation();
+            InitComboStock();
             InitDatePickerFormat();
+            m_cbStock.SelectedIndex = -1;
+            m_cbLocation.SelectedIndex = -1;
         }
 
         private void m_dtValidFrom_ValueChanged(object sender, EventArgs e)
@@ -156,24 +173,133 @@ namespace StockManagement
             OnSearch();
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Stock myStock = new Stock(m_dtStock, m_dbTools);
-            myStock.Show();
-        }
+        #endregion
 
+        #region Location Event
         private void locationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Location myLocation = new Location(m_dtLocation, m_dbTools);
             myLocation.Show();
         }
+        #endregion
+
+        #region Stock Event
+
+        private void newStockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stock myStock = new Stock(null, m_dbTools, Mode.Add);
+            myStock.Show();
+        }
+
+        private void viewStockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // on récupère la ligne sélectionnée
+            DataGridViewRow dRow = m_grResults.CurrentRow as DataGridViewRow;
+            if (dRow != null)
+            {
+                // on récupère toutes les données (même cachées) de la ligne sélectionnée
+                DataRow drRow = ((DataRowView)dRow.DataBoundItem).Row;
+
+                // on initialise une nouvelle fenêtre Stock avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
+                Stock viewStock = new Stock(drRow, m_dbTools, Mode.View);
+                viewStock.Show();
+            }
+        }
+
+        private void updateStockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // on récupère la ligne sélectionnée
+            DataGridViewRow dRow = m_grResults.CurrentRow as DataGridViewRow;
+            if (dRow != null)
+            {
+                // on récupère toutes les données (même cachées) de la ligne sélectionnée
+                DataRow drRow = ((DataRowView)dRow.DataBoundItem).Row;
+
+                // on initialise une nouvelle fenêtre Stock avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
+                Stock updateStock = new Stock(drRow, m_dbTools, Mode.Update);
+                updateStock.Show();
+            }
+        }
+
+        private void cancelStockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow dRow = m_grResults.CurrentRow as DataGridViewRow;
+            if (dRow != null)
+            {
+                // on récupère toutes les données (même cachées) de la ligne sélectionnée
+                DataRow drRow = ((DataRowView)dRow.DataBoundItem).Row;
+
+                string sStatusActuel = drRow.Field<string>(SearchDefines.column_status);
+                if (!string.IsNullOrEmpty(sStatusActuel) && sStatusActuel == "A")
+                {
+                    int iIdStock = drRow.Field<int>(SearchDefines.column_id_stock);
+                    string sStockNumber = drRow.Field<string>(SearchDefines.column_stock_number);
+                    decimal dCapacity = drRow.Field<decimal>(SearchDefines.column_stock_capacity);
+                    int iIdLocation = drRow.Field<int>(SearchDefines.column_location);
+                    string sStatus = "C";
+
+                    // on initialise une nouvelle fenêtre Stock avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
+                    if (m_dbTools.UpdateStock(iIdStock, sStockNumber, dCapacity, iIdLocation, sStatus))
+                    {
+                        drRow.SetField(SearchDefines.column_status, "C");
+                        m_dbTools.SearchResult.AcceptChanges();
+
+                        MessageBox.Show(sStockNumber + " was cancelled", "Information");
+                    }
+                }
+                else
+                {
+                    //todo message
+                }
+
+            }
+        }
 
         #endregion
 
-        private void newToolStripMenuItem1_Click(object sender, EventArgs e)
+        #region Tank Events
+
+        private void newTankToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Tank myTank = new Tank(m_dbTools);
+            Tank myTank = new Tank(null, m_dbTools, Mode.Add);
             myTank.Show();
         }
+
+        private void viewTankToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // on récupère la ligne sélectionnée
+            DataGridViewRow dRow = m_grResults.CurrentRow as DataGridViewRow;
+            if (dRow != null)
+            {
+                // on récupère toutes les données (même cachées) de la ligne sélectionnée
+                DataRow drRow = ((DataRowView)dRow.DataBoundItem).Row;
+
+                // on initialise une nouvelle fenêtre Tank avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
+                Tank viewTank = new Tank(drRow, m_dbTools, Mode.View);
+                viewTank.Show();
+            }
+        }
+
+        private void updateTankToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            // on récupère la ligne sélectionnée
+            DataGridViewRow dRow = m_grResults.CurrentRow as DataGridViewRow;
+            if (dRow != null)
+            {
+                // on récupère toutes les données (même cachées) de la ligne sélectionnée
+                DataRow drRow = ((DataRowView)dRow.DataBoundItem).Row;
+
+                // on initialise une nouvelle fenêtre Tank avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
+                Tank updateTank = new Tank(drRow, m_dbTools, Mode.Update);
+                updateTank.Show();
+            }
+        }
+
+
+        #endregion
+
+        #endregion
+
+
     }
 }

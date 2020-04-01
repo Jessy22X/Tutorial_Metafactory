@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Defines;
-using static Defines.LocationDefines;
 
 namespace StockManagement
 {
@@ -148,8 +147,6 @@ namespace StockManagement
             m_dtLocation = m_dbTools.GetLocation();
             LoadGridLocation();
             SwitchMode(Mode.View);
-
-            
         }
 
         private void m_btCancelLocation_Click(object sender, EventArgs e)
