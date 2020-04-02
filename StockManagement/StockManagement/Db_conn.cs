@@ -579,8 +579,14 @@ namespace StockManagement
                     //check if there are records
                     if (dr.HasRows)
                     {
-                        string sError = dr.GetValue(0).ToString();
-                        MessageBox.Show(sError, "Error");
+                        while (dr.Read())
+                        {
+                            for (int i = 0; i < dr.FieldCount; i++)
+                            {
+                                string error = dr.GetValue(i).ToString();
+                                MessageBox.Show(error, "Error");
+                            }
+                        }
                     }
                     else
                     {

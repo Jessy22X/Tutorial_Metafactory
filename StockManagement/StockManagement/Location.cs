@@ -131,6 +131,7 @@ namespace StockManagement
                 if (!string.IsNullOrEmpty(sLocation))
                 {
                     m_dbTools.AddLocation(sLocation);
+                    this.DialogResult = DialogResult.OK;
                 }
             }
             else if (m_Mode == Mode.Update)
@@ -142,7 +143,11 @@ namespace StockManagement
 
                 // ajouter ce code pour AddRowStock et AddRowTank
                 if (!string.IsNullOrEmpty(sLocation) && sLocation != sOldLocation)
+                {
                     m_dbTools.UpdateLocation(iIdLocation, sLocation);
+                    this.DialogResult = DialogResult.OK;
+                }
+                    
             }
             m_dtLocation = m_dbTools.GetLocation();
             LoadGridLocation();
@@ -152,10 +157,12 @@ namespace StockManagement
         private void m_btCancelLocation_Click(object sender, EventArgs e)
         {
             SwitchMode(Mode.View);
+            this.DialogResult = DialogResult.OK;
         }
 
         private void m_btClose_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.OK;
             Close();
         }
         #endregion

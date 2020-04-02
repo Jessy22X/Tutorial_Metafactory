@@ -47,7 +47,7 @@ namespace StockManagement
         }
         private void InitComboLocation()
         {
-            if(m_dtLocation != null && m_dtLocation.Rows.Count > 0)
+            if (m_dtLocation != null && m_dtLocation.Rows.Count > 0)
             {
                 m_cbLocation.DataSource = m_dtLocation;
                 m_cbLocation.ValueMember = "id_location";
@@ -69,8 +69,8 @@ namespace StockManagement
 
         private void OnSearch()
         {
-            DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text) ? new DateTime(2001,1,1) : (DateTime?)m_dtValidFrom.Value;
-            DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text) ? new DateTime(2001, 1, 1) : (DateTime?)m_dtValidTo.Value;
+            DateTime? validDateFrom = string.IsNullOrWhiteSpace(m_dtValidFrom.Text) ? new DateTime(2001, 1, 1) : Convert.ToDateTime(m_dtValidFrom.Value.ToString("dd MMM yy"));
+            DateTime? validDateTo = string.IsNullOrWhiteSpace(m_dtValidTo.Text) ? new DateTime(2001, 1, 1) : new DateTime(m_dtValidTo.Value.Year, m_dtValidTo.Value.Month, m_dtValidTo.Value.Day, 23, 59, 59);
             int? iIdLocation = m_cbLocation.SelectedValue == null ? 0 : Convert.ToInt32(m_cbLocation.SelectedValue);
             int? iIdStock = m_cbStock.SelectedValue == null ? 0 : Convert.ToInt32(m_cbStock.SelectedValue);
 
@@ -84,6 +84,7 @@ namespace StockManagement
                 BindingSource SBind = new BindingSource();
                 SBind.DataSource = m_dbTools.SearchResult;
                 m_grResults.DataSource = SBind;
+                m_grResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 SetHeaderColumns();
                 SetLineColor();
             }
@@ -93,14 +94,14 @@ namespace StockManagement
         {
             foreach (DataGridViewColumn dgc in m_grResults.Columns)
             {
-                if (dgc.DataPropertyName == SearchDefines.column_id_stock || dgc.DataPropertyName == SearchDefines.column_id_stock)
+                if (dgc.DataPropertyName == SearchDefines.column_id_stock ||
+                    dgc.DataPropertyName == SearchDefines.column_id_tank ||
+                    dgc.DataPropertyName == SearchDefines.column_location ||
+                    dgc.DataPropertyName == SearchDefines.column_status)
                 {
                     dgc.Visible = false;
                 }
-                if (dgc.DataPropertyName == SearchDefines.column_id_tank || dgc.DataPropertyName == SearchDefines.column_id_tank)
-                {
-                    dgc.Visible = false;
-                }
+
                 if (dgc.DataPropertyName == SearchDefines.column_tank_name)
                 {
                     dgc.HeaderText = "Tank name";
@@ -109,7 +110,7 @@ namespace StockManagement
                 {
                     dgc.HeaderText = "Stock number";
                 }
-                if (dgc.DataPropertyName == SearchDefines.column_location)
+                if (dgc.DataPropertyName == SearchDefines.column_location_name)
                 {
                     dgc.HeaderText = "Location";
                 }
@@ -121,21 +122,32 @@ namespace StockManagement
                 {
                     dgc.HeaderText = "Valid to";
                 }
-               
+                if (dgc.DataPropertyName == SearchDefines.column_stock_capacity)
+                {
+                    dgc.HeaderText = "Capacity";
+                    dgc.DefaultCellStyle.Format = "#,##0.00";
+                }
+                if (dgc.DataPropertyName == SearchDefines.column_tank_quantity)
+                {
+                    dgc.HeaderText = "Quantity";
+                    dgc.DefaultCellStyle.Format = "#,##0.00";
+                }
+
             }
         }
+
         private void SetLineColor()
         {
             foreach (DataGridViewRow dgr in m_grResults.Rows)
             {
                 DataRowView dgv = dgr.DataBoundItem as DataRowView;
-                if(dgv != null)
+                if (dgv != null)
                 {
                     DataRow dr = dgv.Row;
                     string sStatus = dr.Field<string>(SearchDefines.column_status);
                     if (!string.IsNullOrEmpty(sStatus) && sStatus == "C")
                         dgr.DefaultCellStyle.BackColor = Color.Red;
-                }                
+                }
             }
         }
 
@@ -162,7 +174,7 @@ namespace StockManagement
         {
             m_dtValidTo.Format = m_defaultDateTimePickerFormat;
         }
-        
+
         private void m_bClearCriteria_Click(object sender, EventArgs e)
         {
             ClearCriteria();
@@ -180,6 +192,23 @@ namespace StockManagement
         {
             Location myLocation = new Location(m_dtLocation, m_dbTools);
             myLocation.Show();
+            if (myLocation != null)
+            {
+                myLocation.FormClosed += MyLocation_FormClosed;
+            }
+        }
+
+        private void MyLocation_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Location myLocation = sender as Location;
+            if (myLocation == null)
+                return;
+
+            if (myLocation.DialogResult == DialogResult.OK)
+            {
+                m_dtLocation = m_dbTools.GetLocation();
+                InitComboLocation();
+            }
         }
         #endregion
 
@@ -189,6 +218,23 @@ namespace StockManagement
         {
             Stock myStock = new Stock(null, m_dbTools, Mode.Add);
             myStock.Show();
+            if (myStock != null)
+            {
+                myStock.FormClosed += MyStock_FormClosed;
+            }
+        }
+
+        private void MyStock_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Stock myStock = sender as Stock;
+            if (myStock == null)
+                return;
+
+            if (myStock.DialogResult == DialogResult.OK)
+            {
+                m_dtStock = m_dbTools.GetStock();
+                InitComboStock();
+            }
         }
 
         private void viewStockToolStripMenuItem_Click(object sender, EventArgs e)
@@ -218,6 +264,10 @@ namespace StockManagement
                 // on initialise une nouvelle fenêtre Stock avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
                 Stock updateStock = new Stock(drRow, m_dbTools, Mode.Update);
                 updateStock.Show();
+                if (updateStock != null)
+                {
+                    updateStock.FormClosed += MyStock_FormClosed;
+                }
             }
         }
 
@@ -249,7 +299,7 @@ namespace StockManagement
                 }
                 else
                 {
-                    //todo message
+                    MessageBox.Show("The status is already empty or canceled");
                 }
 
             }
@@ -263,6 +313,22 @@ namespace StockManagement
         {
             Tank myTank = new Tank(null, m_dbTools, Mode.Add);
             myTank.Show();
+            if (myTank != null)
+            {
+                myTank.FormClosed += MyTank_FormClosed;
+            }
+        }
+
+        private void MyTank_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Tank myTank = sender as Tank;
+            if (myTank == null)
+                return;
+
+            if (myTank.DialogResult == DialogResult.OK)
+            {
+                OnSearch();
+            }
         }
 
         private void viewTankToolStripMenuItem_Click(object sender, EventArgs e)
@@ -292,6 +358,10 @@ namespace StockManagement
                 // on initialise une nouvelle fenêtre Tank avec en argument les données de la ligne sélectionnée (ou pas), paramètre de connexion et le mode de Vue
                 Tank updateTank = new Tank(drRow, m_dbTools, Mode.Update);
                 updateTank.Show();
+                if (updateTank != null)
+                {
+                    updateTank.FormClosed += MyTank_FormClosed;
+                }
             }
         }
 

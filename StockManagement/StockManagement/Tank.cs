@@ -73,7 +73,7 @@ namespace StockManagement
                 string sTankName = m_drTank.Field<string>(SearchDefines.column_tank_name);
                 m_tTankName.Text = sTankName;
                 decimal dQuantity = m_drTank.Field<decimal>(SearchDefines.column_tank_quantity);
-                m_tTankQuantity.Text = dQuantity.ToString();
+                m_tTankQuantity.Text = dQuantity.ToString("#,##0.00");
                 string dtValidFrom = m_drTank.Field<string>(SearchDefines.column_valid_from);
                 m_dtTankValidFrom.Text = dtValidFrom == null ? " " : dtValidFrom.ToString();
                 string dtValidTo = m_drTank.Field<string>(SearchDefines.column_valid_to);
@@ -110,6 +110,8 @@ namespace StockManagement
                         if (m_dbTools.UpdateTank(iIdStock, iIdTank, sTankName, dQuantity, dtValidFrom, dtValidto))
                         {
                             MessageBox.Show("This stock has been updated successfully");
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
                         }
                     }
                 }
@@ -126,17 +128,18 @@ namespace StockManagement
                     if (m_dbTools.AddNewTank(iIdStock, sTankName, dQuantity, dtValidFrom, dtValidto))
                     {
                         MessageBox.Show("New stock added");
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
                     }
                 }
                 else
                     Console.WriteLine("error");
-
-                this.Close();
             }
         }
 
         private void m_bCancelTank_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
@@ -147,5 +150,7 @@ namespace StockManagement
         }
 
         #endregion
+
+        
     }
 }

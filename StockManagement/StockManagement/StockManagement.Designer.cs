@@ -266,6 +266,7 @@
             this.m_grResults.AllowUserToDeleteRows = false;
             this.m_grResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.m_grResults.ContextMenuStrip = this.contextMenuStrip1;
+            this.m_grResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.m_grResults.Location = new System.Drawing.Point(12, 120);
             this.m_grResults.Name = "m_grResults";
             this.m_grResults.Size = new System.Drawing.Size(776, 330);

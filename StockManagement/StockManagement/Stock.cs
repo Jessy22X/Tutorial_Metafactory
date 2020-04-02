@@ -26,7 +26,7 @@ namespace StockManagement
         {
             InitializeComponent();
             m_dbTools = dbTools;
-            m_dtLocation = m_dbTools.Location;
+            m_dtLocation = m_dbTools.GetLocation();
             m_drStock = drStock;
             m_Mode = mode;
         }
@@ -105,6 +105,9 @@ namespace StockManagement
                         if (m_dbTools.UpdateStock(iIdStock, sStockNumber, dCapacity, iIdLocation, sStatus))
                         {
                             MessageBox.Show("This stock has been updated successfully");
+                            
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
                         }
                     }
                 }
@@ -114,24 +117,24 @@ namespace StockManagement
 
             // La fenêtre a été ouverte à partir de Stock > New
             else if(m_Mode == Mode.Add)
-            {               
-
+            {           
                 if (!string.IsNullOrEmpty(sStockNumber) && dCapacity > 0 && iIdLocation != 0)
                 {
                     if (m_dbTools.AddNewStock(sStockNumber, dCapacity, iIdLocation))
                     {
                         MessageBox.Show("New stock added");
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
                     }
                 }
                 else
                     Console.WriteLine("error");
-
-                this.Close();
             }
         }
  
         private void m_bCancelStock_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
         #endregion
